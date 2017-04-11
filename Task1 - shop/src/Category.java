@@ -1,20 +1,32 @@
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by W510 on 09.04.2017.
  */
 public class Category {
-    protected String category;
+    @SerializedName("categoryTitle")
+    public String categoryName;
+    @SerializedName("categoryId")
+    public String categoryId;
 
-    public Category(String category) {
-        this.category = category;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public String getCategory() {
-        return category;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
+    public String getCategoryId() {
+        return categoryId;
+    }
 
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
 
-    public void setCategory(String category) {
-        this.category = category;
+    @Override
+    public String toString() {
+        return "category "+ categoryName;
     }
 }
