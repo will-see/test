@@ -15,6 +15,7 @@ public class Shop {
     static int fileReadCounter;
     private static Map<SportEquipment, Integer> goods = new HashMap<>();
    static RentUnit cart=new RentUnit();
+    static ArrayList<Integer>selectedIds=new ArrayList<>();
 
     public static void main(String[] args) {
         // инициализация магазина
@@ -29,7 +30,7 @@ public class Shop {
     }
 
     private static void listenUserCommands() {
-        System.out.println("inter your command");
+        System.out.println("enter your command: rent, report, exit");
         String command = readLine();
         switch (command){
             case RENT:
@@ -40,7 +41,7 @@ public class Shop {
                 break;
             default:
                 System.out.println("command, not detected inter your command again");
-                System.out.println("commands: "+ RENT+", "+REPORRT);
+//                System.out.println("commands: "+ RENT+", "+ REPORRT);
                 listenUserCommands();
         }
 
@@ -50,13 +51,14 @@ public class Shop {
         // show all products
         for (Map.Entry<SportEquipment,Integer> prod :goods.entrySet()) {
             SportEquipment equipment=prod.getKey();
-            System.out.println(equipment.toString()+"count "+prod.getValue().toString());
+            System.out.println(equipment.toString()+ " count:"+ prod.getValue().toString());
         }
-        System.out.println("inter product id for choice");
+//        System.out.println("enter product id for choice");
+
         ArrayList<Integer> ids = listentProdID();
 
         if (ids.size()>3){
-            System.out.println("maximum 3");
+            System.out.println("you can get only 3 products");
             doRent();
         }
         ArrayList<SportEquipment> order=new ArrayList<>();
@@ -80,24 +82,28 @@ public class Shop {
     }
 
     private static ArrayList<Integer> listentProdID() {
-        System.out.println("inter products ids");
+        System.out.println("enter products ID");
         String idsStr=readLine();
-        ArrayList<Integer>selectedIds=new ArrayList<>();
+//        ArrayList<Integer>selectedIds=new ArrayList<>();
          ArrayList<String> ids= new ArrayList<String>(Arrays.asList(idsStr.split(","))) ;
         for (String idString:ids) {
             try {
                 Integer id= Integer.parseInt(idString);
                 selectedIds.add(id);
+
             }catch (NumberFormatException e){
                 System.out.println("input error");
                 listentProdID();
             }
+            while(selectedIds.size()>3)
+                selectedIds.remove(3);
+            System.out.println(selectedIds.size());
         }
         return selectedIds;
     }
 
     private static void doReport() {
-        System.out.println("in rent");
+//        System.out.println("in rent");
         cart.showOrder();
     }
 
@@ -106,11 +112,11 @@ public class Shop {
     private static String getProducts() {
         String fileName;
         if (fileReadCounter > 1) {
-            System.out.println("load default file");
+            System.out.println("loaded default file");
             fileName = "products.txt";
             fileReadCounter = 0;
         } else {
-            System.out.println("inter file name with products");
+            System.out.println("enter file name with products");
             fileName = readLine();
             fileReadCounter++;
         }
@@ -137,13 +143,4 @@ public class Shop {
         return fileName;
     }
 
-//        Console c = System.console();
-//        if (c == null) {
-//            System.err.println("No console.");
-//            System.exit(1);
-//        }
-//
-//        String login = c.readLine("Enter your login: ");
-//        char [] oldPassword = c.readPassword("Enter your old password: ");
-//    }
 }

@@ -27,6 +27,6 @@ public class Category {
 
     @Override
     public String toString() {
-        return "category "+ categoryName;
+        return "category" +":"+ categoryName;
     }
 }

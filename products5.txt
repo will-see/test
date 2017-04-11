@@ -2,12 +2,12 @@
   {
 	"Category":{
 	"categoryId":1,
-	"categoryTitle": "titleCategory1"
+	"categoryTitle": "titleCategory"
 	},
     "id": 1,
-    "price": 10,
-    "title": "title1",
-    "count":11
+    "price": 3,
+    "title": "title1
+    "count":4
 },
   {
 	"Category":{
@@ -15,9 +15,9 @@
 	"categoryTitle": "titleCategory2"
 	},
     "id": 2,
-    "price": 20,
+    "price": 10,
     "title": "title2",
-    "count": 22
+    "count": 2
 },
   {
 	"Category":{
@@ -25,8 +25,8 @@
 	"categoryTitle": "titleCategory3"
 	},
     "id": 3,
-    "price": 30,
+    "price": 12,
     "title": "title3",
-    "count":33
+    "count":5
 }
 ]
