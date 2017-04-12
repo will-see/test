@@ -10,10 +10,13 @@ public class RentUnit {
     }
    public void showOrder(){
        System.out.println("in rent now:");
-       for (SportEquipment unit:units) {
-           System.out.println(unit.toString());
+       try {
+           for (SportEquipment unit:units) {
+               System.out.println(unit.toString());
+           }
+       } catch (Exception e) {
+           System.out.println("nothing rented");
        }
-
-      //  вывестисписок в консоль units
+       //  вывестисписок в консоль units
    }
 }

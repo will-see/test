@@ -1,21 +1,18 @@
 import utils.ReadFileUtil;
 
 import java.io.*;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by W510 on 08.04.2017.
  */
 public class Shop {
-    final static String REPORRT = "report", RENT = "rent";
+    final static String REPORRT = "report", RENT = "rent", INSTOCK = "instock", EXIT = "exit";
     static int fileReadCounter;
     private static Map<SportEquipment, Integer> goods = new HashMap<>();
-   static RentUnit cart=new RentUnit();
-    static ArrayList<Integer>selectedIds=new ArrayList<>();
+    static RentUnit cart = new RentUnit();
+    static ArrayList<Integer> selectedIds = new ArrayList<>();
+    static ArrayList<SportEquipment> order = new ArrayList<>();
 
     public static void main(String[] args) {
         // инициализация магазина
@@ -26,88 +23,100 @@ public class Shop {
             goods.put(prod, prod.count);
         }
         listenUserCommands();
-        // действияпользователя
     }
-
+    // команды
     private static void listenUserCommands() {
-        System.out.println("enter your command: rent, report, exit");
+        System.out.println("enter your command: rent, report, instock, exit");
         String command = readLine();
-        switch (command){
+        switch (command) {
             case RENT:
-                doRent();
+                if (selectedIds.size() < 3)
+                    doRent();
+                else {
+                    System.out.println("you can get only 3 products");
+                    listenUserCommands();
+                }
                 break;
             case REPORRT:
                 doReport();
+                listenUserCommands();
+                break;
+            case INSTOCK:
+                doInstock();
+                listenUserCommands();
+                break;
+            case EXIT:
+                doExit();
                 break;
             default:
                 System.out.println("command, not detected inter your command again");
-//                System.out.println("commands: "+ RENT+", "+ REPORRT);
                 listenUserCommands();
         }
-
     }
 
     private static void doRent() {
         // show all products
-        for (Map.Entry<SportEquipment,Integer> prod :goods.entrySet()) {
-            SportEquipment equipment=prod.getKey();
-            System.out.println(equipment.toString()+ " count:"+ prod.getValue().toString());
-        }
-//        System.out.println("enter product id for choice");
-
-        ArrayList<Integer> ids = listentProdID();
-
-        if (ids.size()>3){
-            System.out.println("you can get only 3 products");
-            doRent();
-        }
-        ArrayList<SportEquipment> order=new ArrayList<>();
-        for (Map.Entry<SportEquipment,Integer> prod :goods.entrySet()) {
-            for (Integer id: ids){
-                boolean selected= id.equals(prod.getKey().id);
-                if(selected){
-                    order.add(prod.getKey());
-                    System.out.println("selected "+prod.getKey().toString());
-                }
+        doInstock();
+//        System.out.println("Available:");
+//        for (Map.Entry<SportEquipment, Integer> prod : goods.entrySet()) {
+//            SportEquipment equipment = prod.getKey();
+//            System.out.println(equipment.toString() + " count:" + prod.getValue().toString());
+//        }
+        Integer id = listentProdID();
+        for (Map.Entry<SportEquipment, Integer> prod : goods.entrySet()) {
+            boolean selected = id.equals(prod.getKey().id);
+            if (selected) {
+                order.add(prod.getKey());
+                System.out.println("selected " + prod.getKey().toString());
+                selectedIds.add(id);
+                prod.setValue(prod.getValue() - 1);
             }
         }
-        if (order.size()>0){
-            cart.setUnits(order);
-            cart.showOrder();
-        }else {
-            System.out.println("products not found");
-        }
+        cart.setUnits(order);
+//        System.out.println(selectedIds.toString());
+//        if (order.size() > 0) {
+//
+////        cart.showOrder();
+//        } else {
+//            System.out.println("products not found");
+//        }
         listenUserCommands();
 
     }
 
-    private static ArrayList<Integer> listentProdID() {
-        System.out.println("enter products ID");
-        String idsStr=readLine();
-//        ArrayList<Integer>selectedIds=new ArrayList<>();
-         ArrayList<String> ids= new ArrayList<String>(Arrays.asList(idsStr.split(","))) ;
-        for (String idString:ids) {
-            try {
-                Integer id= Integer.parseInt(idString);
-                selectedIds.add(id);
 
-            }catch (NumberFormatException e){
-                System.out.println("input error");
-                listentProdID();
-            }
-            while(selectedIds.size()>3)
-                selectedIds.remove(3);
-            System.out.println(selectedIds.size());
+    private static Integer listentProdID() {
+        System.out.println("enter products ID");
+        String idStr = readLine();
+        Integer id = null;
+        try {
+            id = Integer.parseInt(idStr);
+        } catch (NumberFormatException e) {
+            System.out.println("input error");
+            listenUserCommands();
         }
-        return selectedIds;
+        return id;
     }
 
     private static void doReport() {
-//        System.out.println("in rent");
+//      предметы взяты в аренду
         cart.showOrder();
+//        listenUserCommands();
     }
 
+    private static void doInstock() {
+        // предметы в наличии
+        System.out.println("Available:");
+        for (Map.Entry<SportEquipment, Integer> prod : goods.entrySet()) {
+            SportEquipment equipment = prod.getKey();
+            System.out.println(equipment.toString() + " count:" + prod.getValue().toString());
+        }
+//        listenUserCommands();
+    }
 
+    private static void doExit() {
+        System.out.println("Programm finished");
+    }
 
     private static String getProducts() {
         String fileName;
@@ -133,14 +142,14 @@ public class Shop {
 
     private static String readLine() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String fileName = null;
+        String readCommand = null;
         try {
-            fileName = reader.readLine();
+            readCommand = reader.readLine();
         } catch (IOException e) {
             e.printStackTrace();
             return "";
         }
-        return fileName;
+        return readCommand;
     }
 
 }

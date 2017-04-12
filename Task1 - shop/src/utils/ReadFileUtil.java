@@ -25,6 +25,4 @@ public class ReadFileUtil {
             }
         return result.toString();
     }
-
-
 }

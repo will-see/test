@@ -19,13 +19,6 @@ public class SportEquipment {
 
     public SportEquipment() {
     }
-
-//    public SportEquipment(/*Category category,*/ String title, int price) {
-////        this.category = category;
-//        this.title = title;
-//        this.price = price;
-//    }
-
     public String getTitle() {
         return title;
     }
